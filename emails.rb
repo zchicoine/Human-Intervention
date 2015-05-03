@@ -7,8 +7,8 @@ class EmailOperations
             emails = []
 
             #sample
-            10.times do
-                emails.push(Email.new({body:'email body', subject:'email subject', date:'12 may', from:'email@address.com', email_address:'my@broker.ca'}))
+            10.times do |i|
+                emails.push(Email.new({body:"email body#{i}", subject:"email subject#{i}", date:"#{i} may", from:"email#{i}@address.com", email_address:"my#{i}@broker.ca"}))
             end
             emails
         end
