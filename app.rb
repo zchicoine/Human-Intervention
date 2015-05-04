@@ -1,35 +1,16 @@
 require 'date'
-require_relative 'backend/emails_backend'
 require_relative 'UI/show_data_view'
 require_relative 'UI/emails_ui'
 
 
 Shoes.app title: 'Human Intervention', width: 1210, height: 660, resizable: false do
 
-    email_ui = EmailOperations::UI.new
-
+    email_ui = EmailOperations::UI.new(self)
     @shipments = [] # keep the shipment information such as Ship and port name and Date
-    @emails_list = [] # keep the list of emails
-    # stack to show emails as a list
-    stack  height:650  , width: 300  do
-        border "#ffffff", strokewidth: 2, curve: 12
-        button('Fetch')  do
-            email_ui.fetch_button_click!(@emails_list,@email_box,self)
-        end
-        10.times do |i|
-            para "\n"
-           @emails_list.push(tagline )
-        end
-    end
-    # ==================== END OF EMAILS LIST ==================== #
 
-    stack margin_left: 5, margin_top: 5, height:650, width:600, scroll: true  do
-        border "#ffffff", strokewidth: 1, curve: 12
-        @email_box = edit_box '',  margin: 5, height:640, width:590
-
-    end
-    # ==================== END OF EMAIL box ==================== #
-
+    email_ui.email_list
+    email_ui.email_box
+    # ==================== START OF INPUT DATA ==================== #
     stack margin_left: 5, margin_top: 5, height:650, width:300, scroll: true  do
         border "#ffffff", strokewidth: 1, curve: 12
 
@@ -75,18 +56,13 @@ Shoes.app title: 'Human Intervention', width: 1210, height: 660, resizable: fals
         end
 
     end
-
-
-    # ==================== END OF EMAIL box ==================== #
-
-
+    # ==================== END OF Input Data ==================== #
 
 end
 
 
 
-##### useful code
-
+#####================ USEFUL CODE ================#####
 #  para "Enter a URL to download:", margin: [10, 8, 10, 0]
 
 # keypress do |key|
@@ -95,3 +71,4 @@ end
 # end
 
 # list_box items: ["Jack", "Ace", "Joker"]
+#####================ END USEFUL CODE ================#####
