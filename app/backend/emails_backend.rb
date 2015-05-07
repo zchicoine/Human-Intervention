@@ -5,13 +5,13 @@ module EmailOperations
         class << self
             # :return [Array] of [Email]. Only return 10 not reviewed emails at a time
             def fetch_emails_all
-                emails = []
+                emails_array = []
+                actual_emails = DataController.new.retrieve_unsuccessful_emails.take(10)
 
-                #sample
-                10.times do |i|
-                    emails.push(Email.new({body:"email body#{i}", subject:"email subject#{i}", date:"#{i} may", from:"email#{i}@address.com", email_address:"my#{i}@broker.ca"}))
+                actual_emails.each do |email|
+                    emails_array.push(Email.new({body:email['body'], subject:email['subject'], date:email['date'], from: 'hard coded for now', email_address:email['email_address']}))
                 end
-                emails
+                emails_array
             end
         end # self
 

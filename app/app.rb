@@ -1,7 +1,7 @@
 require 'date'
+require 'Data_Controller'
 require_relative 'UI/show_data_view'
 require_relative 'UI/emails_ui'
-
 
 Shoes.app title: 'Human Intervention', width: 1210, height: 660, resizable: false do
 
@@ -59,8 +59,6 @@ Shoes.app title: 'Human Intervention', width: 1210, height: 660, resizable: fals
     # ==================== END OF Input Data ==================== #
 
 end
-
-
 
 #####================ USEFUL CODE ================#####
 #  para "Enter a URL to download:", margin: [10, 8, 10, 0]
