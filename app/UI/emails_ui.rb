@@ -10,7 +10,7 @@ module EmailOperations
             @app = appGui
             @list = [] # keep the list of emails
             @text_box = nil
-
+            @email_to_fetch = nil # specify the email to be retrieve from the server
             # keep all the information need to be save to master website
             @email_hash = {
                 email_object: nil, # object of [EmailOperations::Backend::Email] class
@@ -27,6 +27,7 @@ module EmailOperations
                 @app.button('Fetch')  do
                     fetch_button_click
                 end
+                @email_to_fetch = @app.edit_line '', top:5, left: 100, width: 180, hieght:15
                 10.times do |i|
                     @app.para ''
                     @list.push(@app.tagline(size:15) )
@@ -56,7 +57,9 @@ module EmailOperations
         # :description it is called when the fetch button clicked
         # :param [Shoes::TextBlock,TextBox] the method will modify the TextBox.text
         def fetch_button_click
-            EmailOperations::Backend.fetch_emails_all.zip(@list).each do |fetch_email,list|
+           emails =  EmailOperations::Backend.fetch_emails_all(@email_to_fetch.text.to_s)
+           @list.each {|list| list.replace('')} # delete all info
+           emails.zip(@list).each do |fetch_email,list|
                 list.replace(@app.link(fetch_email.email_address) {
                                  @email_hash[:email_object] = fetch_email
                                  @email_hash[:email_address] = fetch_email.email_address

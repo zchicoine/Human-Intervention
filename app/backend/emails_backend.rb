@@ -3,11 +3,15 @@ module EmailOperations
     module Backend
 
         class << self
+            # :param email address to be fetch, if it is nil then all email is fetched
             # :return [Array] of [Email]. Only return 10 not reviewed emails at a time
-            def fetch_emails_all
+            def fetch_emails_all(email_address)
                 emails_array = []
-                actual_emails = DataController.new.retrieve_unsuccessful_emails.take(10)
-
+                if email_address.nil? or email_address.to_s.empty?
+                    actual_emails = DataController.new.retrieve_unsuccessful_emails.take(10)
+                else
+                    actual_emails = DataController.new.retrieve_unsuccessful_emails_by_email_address(email_address).take(10)
+                end
                 actual_emails.each do |email|
                     emails_array.push(Email.new({body:email['body'], subject:email['subject'], date:email['date'], from: 'hard coded for now', email_address:email['email_address']}))
                 end
