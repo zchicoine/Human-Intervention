@@ -8,7 +8,8 @@ module EmailOperations
 
         def initialize(appGui)
             @app = appGui
-            @list = [] # keep the list of emails
+            @list = [] # keep the list of emails with their UIs
+            @list_of_fetch_emails = []
             @text_box = nil
             @email_to_fetch = nil # specify the email to be retrieve from the server
             # keep all the information need to be save to master website
@@ -44,10 +45,14 @@ module EmailOperations
         end
 
         # :description delete the email from the server
-        def delete_an_email
+        # :return [Boolean] true if it has been deleted, false otherwise
+        def delete
             if @app.confirm('Are you sure, cannot be undo')
-                @app.alert  @email_hash[:email_object]
+                EmailOperations::Backend.delete_an_email(@email_hash[:email_object].key,@email_hash[:email_object].email_address)
+                @app.alert  "#{@email_hash[:email_object].email_address} has been deleted"
+                return true
             end
+            false
         end
         def mark_an_email_as_reviewed
             @app.alert @email_hash[:email_object]
@@ -57,9 +62,13 @@ module EmailOperations
         # :description it is called when the fetch button clicked
         # :param [Shoes::TextBlock,TextBox] the method will modify the TextBox.text
         def fetch_button_click
-           emails =  EmailOperations::Backend.fetch_emails_all(@email_to_fetch.text.to_s)
-           @list.each {|list| list.replace('')} # delete all info
-           emails.zip(@list).each do |fetch_email,list|
+            @list_of_fetch_emails =  EmailOperations::Backend.fetch_emails_all(@email_to_fetch.text.to_s)
+            update_emails_list
+        end
+
+        def update_emails_list
+            @list.each {|list| list.replace('')} # delete all info
+            @list_of_fetch_emails.zip(@list).each do |fetch_email,list|
                 list.replace(@app.link(fetch_email.email_address) {
                                  @email_hash[:email_object] = fetch_email
                                  @email_hash[:email_address] = fetch_email.email_address
@@ -69,10 +78,15 @@ module EmailOperations
                              },
                              "\t \t ",
                              @app.link('Delete', size: 12) {
-                                delete_an_email
+                                 @email_hash[:email_object] = fetch_email
+                                 if delete
+                                     @list_of_fetch_emails.delete(fetch_email)
+                                     update_emails_list
+                                 end
                              }
                 )
             end
+
         end
 
     end

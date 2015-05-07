@@ -10,23 +10,30 @@ module EmailOperations
                 if email_address.nil? or email_address.to_s.empty?
                     actual_emails = DataController.new.retrieve_unsuccessful_emails.take(10)
                 else
-                    actual_emails = DataController.new.retrieve_unsuccessful_emails_by_email_address(email_address).take(10)
+                    _email = DataController.new.retrieve_unsuccessful_emails_by_email_address(email_address)
+                    actual_emails = _email.nil? ? [] :_email
+
                 end
                 actual_emails.each do |email|
-                    emails_array.push(Email.new({body:email['body'], subject:email['subject'], date:email['date'], from: 'hard coded for now', email_address:email['email_address']}))
+                    emails_array.push(Email.new({Key:email['Key'], body:email['body'], subject:email['subject'], date:email['date'], from: 'hard coded for now', email_address:email['email_address']}))
                 end
                 emails_array
+            end
+
+            def delete_an_email(key,email)
+                DataController.new.delete_unsuccessful_emails(key,email)
             end
         end # self
 
         # email class
         class Email
 
-            attr_reader :body, :subject , :from, :date, :email_address
+            attr_reader :body, :subject , :from, :date, :email_address, :key
 
 
             #: param [Hash] {subject:,body:,from:,date:,email_address}
             def initialize(email)
+                @key = email[:Key]
                 @body = email[:body]
                 @subject = email[:subject]
                 @from = email[:from]
