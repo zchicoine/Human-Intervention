@@ -20,10 +20,32 @@ module EmailOperations
                 emails_array
             end
 
+            # :description delete an email
+            # :param [String] key of the email
+            # :param [String] email address
             def delete_an_email(key,email)
                 DataController.new.delete_unsuccessful_emails(key,email)
             end
+
+            # :param [Hash] {email:{status:'succ',body:,subject:,from:,email_address,etc}, ship_info:[{ship_name:,port_name:,open_date:},etc]}
+            # :return [Hash] {error:nil,value:param}
+            def save_data_to_mainDB(data)
+                begin
+                    connect_to_mainDB
+                    DataController.new.successful_email(data)
+                    {error:nil,value: data}
+                rescue Exception => e
+                    {error:e,value:data}
+                end
+            end
+
+            private
+            def connect_to_mainDB
+                DataController::DB::MainDB::Config.connect(:jruby)
+            end
+
         end # self
+
 
         # email class
         class Email

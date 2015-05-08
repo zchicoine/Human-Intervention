@@ -50,7 +50,8 @@ Shoes.app title: 'Human Intervention', width: 1210, height: 660, resizable: fals
             end
         }
         button('Show data',left:100) do
-            unless  email_ui.email_hash[:shipments].nil?
+            unless email_ui.email_hash[:shipments].nil? or email_ui.email_hash[:email_object].nil?
+
                 ShowDataView.new(email_ui.email_hash)
             end
         end

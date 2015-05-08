@@ -1,5 +1,4 @@
 require_relative '../backend/emails_backend'
-require 'shoes'
 
 
 module EmailOperations
@@ -86,8 +85,6 @@ module EmailOperations
                              }
                 )
             end
-
         end
-
     end
 end
