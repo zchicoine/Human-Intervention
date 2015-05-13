@@ -42,6 +42,8 @@ module EmailOperations
             private
             def connect_to_mainDB
                 DataController::DB::MainDB::Config.connect(:jruby)
+                ## connect to local database
+                #DataController::DB::MainDB::Config.connect(:jruby,{'adapter' =>'jdbcsqlite3', 'pool' => 5, 'database' =>'/Users/work/Documents/D3_prjects/The-Ship-Network/Website/Ship-network/db/development.sqlite3', 'timeout' => 5000})
             end
 
         end # self
